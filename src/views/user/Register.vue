@@ -59,24 +59,6 @@
             <a-input style="width: 80%" size="large" placeholder="11 位手机号"></a-input>
           </a-input-group>-->
 
-      <a-row :gutter="16">
-        <a-col class="gutter-row" :span="16">
-          <a-form-item>
-            <a-input size="large" type="text" placeholder="验证码" v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}]">
-              <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
-          </a-form-item>
-        </a-col>
-        <a-col class="gutter-row" :span="8">
-          <a-button
-            class="getCaptcha"
-            size="large"
-            :disabled="state.smsSendBtn"
-            @click.stop.prevent="getCaptcha"
-            v-text="!state.smsSendBtn && '获取验证码'||(state.time+' s')"></a-button>
-        </a-col>
-      </a-row>
-
       <a-form-item>
         <a-button
           size="large"
@@ -95,9 +77,9 @@
 </template>
 
 <script>
-import { getSmsCaptcha } from '@/api/login'
 import { deviceMixin } from '@/store/device-mixin'
-
+import { register } from '@/api/login'
+import md5 from 'md5'
 const levelNames = {
   0: '低',
   1: '低',
@@ -127,7 +109,6 @@ export default {
 
       state: {
         time: 60,
-        smsSendBtn: false,
         passwordLevel: 0,
         passwordLevelChecked: false,
         percent: 10,
@@ -211,55 +192,38 @@ export default {
       validateFields({ force: true }, (err, values) => {
         if (!err) {
           state.passwordLevelChecked = false
-          $router.push({ name: 'registerResult', params: { ...values } })
+          delete values.password2
+          const registerParams = { ...values }
+          registerParams.username = registerParams.email
+          registerParams.password = md5(registerParams.password)
+          console.log(registerParams)
+          register(registerParams)
+            .then((res) => {
+              if(res.code == 200){
+                this.$notification['success']({
+                  message: '成功',
+                  description: '恭喜您，注册成功！请登录',
+                  duration: 4
+                })
+                history.back()
+              }else{
+                this.$notification['warning']({
+                  message: '警告',
+                  description: res.msg,
+                  duration: 4
+                })
+              }
+            })
+            .catch(err => this.requestFailed(err))
         }
       })
-    },
-
-    getCaptcha (e) {
-      e.preventDefault()
-      const { form: { validateFields }, state, $message, $notification } = this
-
-      validateFields(['mobile'], { force: true },
-        (err, values) => {
-          if (!err) {
-            state.smsSendBtn = true
-
-            const interval = window.setInterval(() => {
-              if (state.time-- <= 0) {
-                state.time = 60
-                state.smsSendBtn = false
-                window.clearInterval(interval)
-              }
-            }, 1000)
-
-            const hide = $message.loading('验证码发送中..', 0)
-
-            getSmsCaptcha({ mobile: values.mobile }).then(res => {
-              setTimeout(hide, 2500)
-              $notification['success']({
-                message: '提示',
-                description: '验证码获取成功，您的验证码为：' + res.result.captcha,
-                duration: 8
-              })
-            }).catch(err => {
-              setTimeout(hide, 1)
-              clearInterval(interval)
-              state.time = 60
-              state.smsSendBtn = false
-              this.requestFailed(err)
-            })
-          }
-        }
-      )
     },
     requestFailed (err) {
       this.$notification['error']({
         message: '错误',
-        description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
+        description: err.msg || '请求出现错误，请稍后再试',
         duration: 4
       })
-      this.registerBtn = false
     }
   },
   watch: {
