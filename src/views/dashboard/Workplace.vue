@@ -7,7 +7,7 @@
         </div>
         <div class="content">
           <div class="content-title">
-            {{ timeFix }}，{{ user.name }}<span class="welcome-text">，{{ welcome }}</span>
+            {{ timeFix }}，{{ user.nickname }}
           </div>
           <div>前端工程师 | 蚂蚁金服 - 某某某事业群 - VUE平台</div>
         </div>
@@ -43,8 +43,8 @@
                 <a-card :bordered="false" :body-style="{ padding: 0 }">
                   <a-card-meta>
                     <div slot="title" class="card-title">
-                      <a-avatar size="small" :src="item.cover"/>
-                      <a>{{ item.title }}</a>
+                      <a-avatar size="small" src="https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png"/>
+                      <a>{{ item.name }}</a>
                     </div>
                     <div slot="description" class="card-description">
                       {{ item.description }}
@@ -128,8 +128,7 @@ import { timeFix } from '@/utils/util'
 import { mapState } from 'vuex'
 import { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import { Radar } from '@/components'
-
-import { getRoleList, getServiceList } from '@/api/manage'
+import { getProjectList } from '@/api/project'
 
 const DataSet = require('@antv/data-set')
 
@@ -202,27 +201,22 @@ export default {
       }
     },
     userInfo () {
-      return this.$store.getters.userInfo
+      return localStorage.getItem('userInfo')
     }
   },
   created () {
-    this.user = this.userInfo
-    this.avatar = this.userInfo.avatar
+    this.user = JSON.parse(this.userInfo)
+    this.avatar = this.user.avatar
   },
   mounted () {
-    // this.getProjects()
-    // this.getActivity()
-    // this.getTeams()
-    // this.initRadar()
+    getProjectList({
+      id: this.user.id
+    }).then(res=>{
+      this.projects = res.data.data;
+      this.loading = false;
+    })
   },
   methods: {
-    getProjects () {
-      this.$http.get('/list/search/projects')
-        .then(res => {
-          this.projects = res.result && res.result.data
-          this.loading = false
-        })
-    },
     getActivity () {
       this.$http.get('/workplace/activity')
         .then(res => {

@@ -10,7 +10,6 @@ import i18n from './locales'
 import { VueAxios } from './utils/request'
 import ProLayout, { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import themePluginConfig from '../config/themePluginConfig'
-
 import bootstrap from './core/bootstrap'
 import './core/lazy_use'
 import './permission' // permission control
@@ -18,7 +17,27 @@ import './utils/filter' // global filter
 import './global.less'
 
 Vue.config.productionTip = false
+var ws = new WebSocket('ws://localhost:8001');
+if(window.WebSocket){
+  ws.onopen = function(e){
+      console.log("连接服务器成功");
+      ws.send("connection1");
+      Vue.prototype.$socket = ws
+  }
+  ws.onclose = function(e){
+      console.log("服务器关闭");
+  }
+  ws.onerror = function(){
+      console.log("连接出错");
+  }
 
+  ws.onmessage = function(e){
+      console.log("收到消息："+e.data)
+  }
+}
+window.onbeforeunload = function() {
+  ws.close();
+}
 // mount axios to `Vue.$http` and `this.$http`
 Vue.use(VueAxios)
 Vue.component('pro-layout', ProLayout)

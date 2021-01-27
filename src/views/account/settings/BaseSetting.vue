@@ -3,50 +3,42 @@
     <a-row :gutter="16">
       <a-col :md="24" :lg="16">
 
-        <a-form layout="vertical">
+        <a-form layout="vertical" ref="form" :form="form" @submit="handleSubmit">
           <a-form-item
             label="昵称"
           >
-            <a-input placeholder="给自己起个名字" />
+            <a-input 
+            v-decorator="[
+              'nickname',
+              {initialValue: userInfo.nickname}
+            ]"
+            placeholder="给自己起个名字" />
           </a-form-item>
           <a-form-item
             label="Bio"
           >
-            <a-textarea rows="4" placeholder="You are not alone."/>
+            <a-textarea rows="4" 
+              v-decorator="[
+                'bio',
+                {initialValue: userInfo.bio}
+              ]" 
+              placeholder="You are not alone."/>
           </a-form-item>
 
           <a-form-item
             label="电子邮件"
-            :required="false"
           >
-            <a-input placeholder="exp@admin.com"/>
-          </a-form-item>
-          <a-form-item
-            label="加密方式"
-            :required="false"
-          >
-            <a-select defaultValue="aes-256-cfb">
-              <a-select-option value="aes-256-cfb">aes-256-cfb</a-select-option>
-              <a-select-option value="aes-128-cfb">aes-128-cfb</a-select-option>
-              <a-select-option value="chacha20">chacha20</a-select-option>
-            </a-select>
-          </a-form-item>
-          <a-form-item
-            label="连接密码"
-            :required="false"
-          >
-            <a-input placeholder="h3gSbecd"/>
-          </a-form-item>
-          <a-form-item
-            label="登录密码"
-            :required="false"
-          >
-            <a-input placeholder="密码"/>
+            <a-input 
+            v-decorator="[
+              'email',
+              {rules: [{ type: 'email', message: '请正确输入邮箱地址' }], validateTrigger: 'blur', initialValue: userInfo.email}
+            ]"
+            placeholder="email"/>
           </a-form-item>
 
           <a-form-item>
-            <a-button type="primary">提交</a-button>
-            <a-button style="margin-left: 8px">保存</a-button>
+            <a-button type="primary" htmlType="submit">保存</a-button>
+            <!-- <a-button style="margin-left: 8px">保存</a-button> -->
           </a-form-item>
         </a-form>
 
@@ -70,7 +62,8 @@
 
 <script>
 import AvatarModal from './AvatarModal'
-
+import { getUserSet } from '@/api/setting'
+import storage from 'store'
 export default {
   components: {
     AvatarModal
@@ -79,6 +72,7 @@ export default {
     return {
       // cropper
       preview: {},
+      form: this.$form.createForm(this),
       option: {
         img: '/avatar2.jpg',
         info: true,
@@ -93,12 +87,41 @@ export default {
         // 开启宽度和高度比例
         fixed: true,
         fixedNumber: [1, 1]
-      }
+      },
+      userInfo:''
     }
+  },
+  created(){
+    this.userInfo = storage.get('userInfo')
+    console.log(this.userInfo)
   },
   methods: {
     setavatar (url) {
       this.option.img = url
+    },
+    handleSubmit(e){
+      e.preventDefault()
+      this.form.validateFields(['email', 'password'], { force: true }, (err, values) => {
+        if (!err) {
+          let params = this.form.getFieldsValue()
+          params.id = this.userInfo.id
+          getUserSet(params).then(res=>{
+            if(res.code == 200){
+              this.userInfo.nickname = params.nickname
+              this.userInfo.bio = params.bio
+              this.userInfo.email = params.email
+              storage.set('userInfo',this.userInfo)
+              this.$notification.success({
+                message:res.msg
+              })
+            }
+          }).catch(err=>{
+            this.$notification.error({
+              message: err.msg
+            })
+          })
+        }
+      })
     }
   }
 }

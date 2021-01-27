@@ -23,14 +23,14 @@ const constantRouterComponents = {
   'StepForm': () => import('@/views/form/stepForm/StepForm'),
   'AdvanceForm': () => import('@/views/form/advancedForm/AdvancedForm'),
 
-  // list
-  'TableList': () => import('@/views/list/TableList'),
-  'StandardList': () => import('@/views/list/BasicList'),
-  'CardList': () => import('@/views/list/CardList'),
-  'SearchLayout': () => import('@/views/list/search/SearchLayout'),
-  'SearchArticles': () => import('@/views/list/search/Article'),
-  'SearchProjects': () => import('@/views/list/search/Projects'),
-  'SearchApplications': () => import('@/views/list/search/Applications'),
+  // project-management
+  'TableList': () => import('@/views/project-management/TableList'),
+  'StandardList': () => import('@/views/project-management/BasicList'),
+  'CardList': () => import('@/views/project-management/CardList'),
+  'SearchLayout': () => import('@/views/project-management/search/SearchLayout'),
+  'SearchArticles': () => import('@/views/project-management/search/Article'),
+  'SearchProjects': () => import('@/views/project-management/search/Projects'),
+  'SearchApplications': () => import('@/views/project-management/search/Applications'),
   'ProfileBasic': () => import('@/views/profile/basic'),
   'ProfileAdvanced': () => import('@/views/profile/advanced/Advanced'),
 

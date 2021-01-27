@@ -2,7 +2,6 @@ import request from '@/utils/request'
 
 const userApi = {
   Login: '/login',
-  Logout: '/logout',
   ForgePassword: '/forge-password',
   Register: '/register',
   SendSms: '/account/sms',
@@ -46,16 +45,6 @@ export function getCurrentUserNav () {
   return request({
     url: userApi.UserMenu,
     method: 'get'
-  })
-}
-
-export function logout () {
-  return request({
-    url: userApi.Logout,
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
-    }
   })
 }
 

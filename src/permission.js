@@ -25,15 +25,21 @@ router.beforeEach((to, from, next) => {
     } else {
       store.commit('SET_ROUTERS')
       const redirect = decodeURIComponent(from.query.redirect || to.path)
-      if (to.path === redirect) {
-        // set the replace: true so the navigation will not leave a history record
+      // if (to.path === redirect) {
+      //   // set the replace: true so the navigation will not leave a history record
+      //   next()
+      //   NProgress.done()
+      // } else {
+      //   // 跳转到目的路由
+      //   next()
+      //   NProgress.done()
+      // }
+      if(to.matched.length){
         next()
         NProgress.done()
-      } else {
-        // 跳转到目的路由
-        next()
-        NProgress.done()
-      }
+      }else{
+        next({path: '/404'})
+      }      
     }
   } else {
     if (whiteList.includes(to.name)) {
