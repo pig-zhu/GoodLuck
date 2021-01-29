@@ -7,3 +7,20 @@ export function getProjectList (parameter) {
       data: parameter
     })
 }
+
+export function addProject (parameter) {
+  return request({
+    url: '/addTask',
+    method: 'post',
+    data: parameter
+  })
+}
+
+// 查询所有用户
+export function getUserList (parameter) {
+  return request({
+    url: '/allUserList',
+    method: 'post',
+    data: parameter
+  })
+}

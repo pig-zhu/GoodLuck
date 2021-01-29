@@ -23,6 +23,11 @@ export default {
 
       return this.$i18n.getLocaleMessage(this.$store.getters.lang).antLocale
     }
+  },
+  created(){
+    setTimeout(()=>{
+      document.body.style.overflowX = 'hidden'
+    },200)
   }
 }
 </script>

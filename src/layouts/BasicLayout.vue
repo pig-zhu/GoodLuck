@@ -30,7 +30,8 @@
 </template>
 
 <script>
-import { SettingDrawer, updateTheme } from '@ant-design-vue/pro-layout'
+import {  updateTheme } from '@ant-design-vue/pro-layout'
+import SettingDrawer from '@/components/SettingDrawer/SettingDrawer'
 import { i18nRender } from '@/locales'
 import { mapState } from 'vuex'
 import { SIDEBAR_TYPE, TOGGLE_MOBILE_TYPE } from '@/store/mutation-types'
@@ -90,7 +91,6 @@ export default {
     })
   },
   created () {
-    console.log(this.mainMenu)
     const routes = this.mainMenu.find(item => item.path === '/')
     this.menus = (routes && routes.children) || []
     // 处理侧栏收起状态

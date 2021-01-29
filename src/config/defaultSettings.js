@@ -15,11 +15,13 @@
 export default {
   navTheme: 'dark', // theme for nav menu
   primaryColor: '#52C41A', // primary color of ant design
-  layout: 'sidemenu', // nav menu position: `sidemenu` or `topmenu`
+  layoutMode: 'sidemenu', // nav menu position: `sidemenu` or `topmenu`
   contentWidth: 'Fluid', // layout of content: `Fluid` or `Fixed`, only works when layout is topmenu
   fixedHeader: false, // sticky header
   fixSiderbar: false, // sticky siderbar
   colorWeak: false,
+  autoHideHeader: false,
+  multiTab: false,
   menu: {
     locale: true
   },

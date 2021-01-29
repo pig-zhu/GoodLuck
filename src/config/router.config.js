@@ -72,55 +72,77 @@ export const asyncRouterMap = [
         path: '/project-management',
         name: 'project-management',
         component: RouteView,
-        redirect: '/project-management/table-list',
+        redirect: '/project-management/card',
         meta: { title: '项目管理', icon: 'table', permission: [ 'table' ] },
         children: [
+          // {
+          //   path: '/project-management/table-list/:pageNo([1-9]\\d*)?',
+          //   name: 'TableListWrapper',
+          //   hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+          //   component: () => import('@/views/project-management/TableList'),
+          //   meta: { title: '查询表格', keepAlive: true, permission: [ 'table' ] }
+          // },
           {
-            path: '/project-management/table-list/:pageNo([1-9]\\d*)?',
-            name: 'TableListWrapper',
-            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
-            component: () => import('@/views/project-management/TableList'),
-            meta: { title: '查询表格', keepAlive: true, permission: [ 'table' ] }
+            path: '/project-management/card',
+            name: 'CardList',
+            component: () => import('@/views/project-management/CardList'),
+            meta: { title: '项目列表', keepAlive: true, permission: [ 'table' ] },
+            redirect: '/project-management/card/one',
+            children:[
+              {
+                path: '/project-management/card/one',
+                name: 'card_one',
+                component: () => import('@/views/project-management/components/one'),
+                meta: { title: '全部列表', keepAlive: true, permission: [ 'table' ] },
+              },
+              {
+                path: '/project-management/card/two',
+                name: 'card_two',
+                component: () => import('@/views/project-management/components/two'),
+                meta: { title: '团队列表', keepAlive: true, permission: [ 'table' ] },
+              },
+              {
+                path: '/project-management/card/three',
+                name: 'card_three',
+                component: () => import('@/views/project-management/components/three'),
+                meta: { title: '我的列表', keepAlive: true, permission: [ 'table' ] },
+              }
+            ]
           },
           {
             path: '/project-management/basic-list',
             name: 'BasicList',
             component: () => import('@/views/project-management/BasicList'),
-            meta: { title: '标准列表', keepAlive: true, permission: [ 'table' ] }
+            meta: { title: '任务列表', keepAlive: true, permission: [ 'table' ] }
           },
-          {
-            path: '/project-management/card',
-            name: 'CardList',
-            component: () => import('@/views/project-management/CardList'),
-            meta: { title: '卡片列表', keepAlive: true, permission: [ 'table' ] }
-          },
-          {
-            path: '/project-management/search',
-            name: 'SearchList',
-            component: () => import('@/views/project-management/search/SearchLayout'),
-            redirect: '/project-management/search/article',
-            meta: { title: '搜索列表', keepAlive: true, permission: [ 'table' ] },
-            children: [
-              {
-                path: '/project-management/search/article',
-                name: 'SearchArticles',
-                component: () => import('../views/project-management/search/Article'),
-                meta: { title: '搜索列表（文章）', permission: [ 'table' ] }
-              },
-              {
-                path: '/project-management/search/project',
-                name: 'SearchProjects',
-                component: () => import('../views/project-management/search/Projects'),
-                meta: { title: '搜索列表（项目）', permission: [ 'table' ] }
-              },
-              {
-                path: '/project-management/search/application',
-                name: 'SearchApplications',
-                component: () => import('../views/project-management/search/Applications'),
-                meta: { title: '搜索列表（应用）', permission: [ 'table' ] }
-              }
-            ]
-          }
+          
+          // {
+          //   path: '/project-management/search',
+          //   name: 'SearchList',
+          //   component: () => import('@/views/project-management/search/SearchLayout'),
+          //   redirect: '/project-management/search/article',
+          //   meta: { title: '搜索列表', keepAlive: true, permission: [ 'table' ] },
+          //   children: [
+          //     {
+          //       path: '/project-management/search/article',
+          //       name: 'SearchArticles',
+          //       component: () => import('../views/project-management/search/Article'),
+          //       meta: { title: '搜索列表（文章）', permission: [ 'table' ] }
+          //     },
+          //     {
+          //       path: '/project-management/search/project',
+          //       name: 'SearchProjects',
+          //       component: () => import('../views/project-management/search/Projects'),
+          //       meta: { title: '搜索列表（项目）', permission: [ 'table' ] }
+          //     },
+          //     {
+          //       path: '/project-management/search/application',
+          //       name: 'SearchApplications',
+          //       component: () => import('../views/project-management/search/Applications'),
+          //       meta: { title: '搜索列表（应用）', permission: [ 'table' ] }
+          //     }
+          //   ]
+          // }
         ]
       },
 

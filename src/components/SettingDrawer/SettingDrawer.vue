@@ -183,14 +183,15 @@ export default {
   data () {
     return {
       visible: false,
-      colorList
+      colorList,
+      ...config
     }
   },
   watch: {
 
   },
   mounted () {
-    updateTheme(this.primaryColor)
+    // updateTheme(this.primaryColor)
     if (this.colorWeak !== config.colorWeak) {
       updateColorWeak(this.colorWeak)
     }
@@ -204,6 +205,9 @@ export default {
     },
     toggle () {
       this.visible = !this.visible
+      setTimeout(()=>{
+        document.body.style.overflowX = 'hidden'
+      },500)
     },
     onColorWeak (checked) {
       this.$store.dispatch('ToggleWeak', checked)
@@ -247,7 +251,7 @@ export default {
     },
     changeColor (color) {
       if (this.primaryColor !== color) {
-        this.$store.dispatch('ToggleColor', color)
+        // this.$store.dispatch('ToggleColor', color)
         updateTheme(color)
       }
     },
