@@ -46,7 +46,7 @@
                       <a-avatar size="small" src="https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png"/>
                       <a>{{ item.name }}</a>
                     </div>
-                    <div slot="description" class="card-description">
+                    <div slot="description" class="card-description text-overflow">
                       {{ item.description }}
                     </div>
                   </a-card-meta>
@@ -63,12 +63,11 @@
             <a-list>
               <a-list-item :key="index" v-for="(item, index) in activities">
                 <a-list-item-meta>
-                  <a-avatar slot="avatar" :src="item.user.avatar"/>
+                  <a-avatar slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/jZUIxmJycoymBprLOUbT.png"/>
                   <div slot="title">
-                    <span>{{ item.user.nickname }}</span>&nbsp;
-                    在&nbsp;<a href="#">{{ item.project.name }}</a>&nbsp;
-                    <span>{{ item.project.action }}</span>&nbsp;
-                    <a href="#">{{ item.project.event }}</a>
+                    <span>{{ item.nickname }}</span>&nbsp;
+                    在&nbsp;<a href="#">{{ item.content }}</a>&nbsp;
+                    <!-- <a href="#">{{ item.project.event }}</a> -->
                   </div>
                   <div slot="description">{{ item.time }}</div>
                 </a-list-item-meta>
@@ -110,7 +109,7 @@
               <a-row>
                 <a-col :span="12" v-for="(item, index) in teams" :key="index">
                   <a>
-                    <a-avatar size="small" :src="item.avatar"/>
+                    <a-avatar size="small" src="https://gw.alipayobjects.com/zos/rmsportal/ubnKSIfAJTxIgXOKlciN.png"/>
                     <span class="member">{{ item.name }}</span>
                   </a>
                 </a-col>
@@ -129,6 +128,7 @@ import { mapState } from 'vuex'
 import { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import { Radar } from '@/components'
 import { getProjectList } from '@/api/project'
+import { activity } from '@/api/manage'
 
 const DataSet = require('@antv/data-set')
 
@@ -215,12 +215,28 @@ export default {
       this.projects = res.data.data;
       this.loading = false;
     })
+    this.getActivity()
+    this.$http.get('/teamList').then(res => {
+        if(res.code == 200){
+          this.teams = res.data
+        }
+      })
+    this.$socket.onmessage = (e) =>{
+      if(e.data == '收到了！'){
+        this.getActivity()
+      }
+    }
   },
   methods: {
     getActivity () {
-      this.$http.get('/workplace/activity')
+      activity()
         .then(res => {
-          this.activities = res.result
+          console.log(res)
+          if(res.code == 200){
+            this.activities = res.data
+          }else{
+            this.$message.error(res.msg)
+          }
         })
     },
     allProject () {
@@ -283,6 +299,9 @@ export default {
       height: 44px;
       line-height: 22px;
       overflow: hidden;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
     }
 
     .project-item {

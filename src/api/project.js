@@ -24,3 +24,28 @@ export function getUserList (parameter) {
     data: parameter
   })
 }
+
+// 删除项目
+export function delProject (parameter) {
+  return request({
+    url: '/delProject',
+    method: 'post',
+    data: parameter
+  })
+}
+// 编辑项目状态和人员
+export function editProject (parameter){
+  return request({
+    url: '/editTask',
+    method: 'post',
+    data: parameter
+  })
+}
+// 订阅报警
+export function alarms (parameter){
+  return request({
+    url: '/alarms',
+    method: 'post',
+    data: parameter
+  })
+}

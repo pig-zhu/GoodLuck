@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { getProjectList, addProject } from '@/api/project'
+import { getProjectList } from '@/api/project'
 import CreateForm from '../modules/CreateForm'
 const dataSource = []
 dataSource.push({})

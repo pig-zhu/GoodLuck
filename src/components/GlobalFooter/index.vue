@@ -1,12 +1,12 @@
 <template>
   <global-footer class="footer custom-render">
     <template v-slot:links>
-      <a href="https://www.github.com/vueComponent/pro-layout" target="_blank">Pro Layout</a>
-      <a href="https://www.github.com/vueComponent/ant-design-vue-pro" target="_blank">Github</a>
-      <a href="https://www.github.com/sendya/" target="_blank">@Sendya</a>
+      <a  target="_blank">Pro Layout</a>
+      <a href="https://github.com/pig-zhu/GoodLuck" target="_blank">Github</a>
+      <a href="https://blog.csdn.net/weixin_42484067" target="_blank">@goudan</a>
     </template>
     <template v-slot:copyright>
-      <a href="https://github.com/vueComponent" target="_blank">vueComponent</a>
+      <a href="#" target="_blank">Good Luck</a>
     </template>
   </global-footer>
 </template>

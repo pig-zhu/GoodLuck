@@ -61,10 +61,10 @@ export function saveService (parameter) {
   })
 }
 
-export function saveSub (sub) {
+export function activity (parameter) {
   return request({
-    url: '/sub',
-    method: sub.id === 0 ? 'post' : 'put',
-    data: sub
+    url: '/activity',
+    method: 'post',
+    data: parameter
   })
 }

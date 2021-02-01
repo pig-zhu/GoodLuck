@@ -7,6 +7,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store/'
 import i18n from './locales'
+import moment from 'moment'
 import { VueAxios } from './utils/request'
 import ProLayout, { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import themePluginConfig from '../config/themePluginConfig'
@@ -38,6 +39,8 @@ if(window.WebSocket){
 window.onbeforeunload = function() {
   ws.close();
 }
+
+Vue.prototype.$moment = moment
 // mount axios to `Vue.$http` and `this.$http`
 Vue.use(VueAxios)
 Vue.component('pro-layout', ProLayout)
