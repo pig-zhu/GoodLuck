@@ -80,9 +80,6 @@ const vueConfig = {
       .oneOf('external')
       .use('file-loader')
       .loader('file-loader')
-      .options({
-        name: 'assets/[name].[hash:8].[ext]'
-      })
 
     // if prod is on
     // assets require on cdn
