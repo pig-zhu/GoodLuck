@@ -275,6 +275,9 @@ export default {
 <style lang="less" scoped>
 
   .setting-drawer-index-content {
+    position: fixed;
+    right: 0;
+    top: 0;
 
     .setting-drawer-index-blockChecbox {
       display: flex;
