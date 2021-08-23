@@ -13,6 +13,7 @@ const locale = {
   'menu.dashboard': 'Dashboard',
   'menu.dashboard.analysis': 'Analysis',
   'menu.dashboard.workplace': 'Workplace',
+  'menu.dashboard.chatroom': 'chatroom',
 
   'layouts.usermenu.dialog.title': 'Message',
   'layouts.usermenu.dialog.content': 'Do you really log-out.',
