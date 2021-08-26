@@ -65,3 +65,7 @@ export function removeLoadingAnimate (id = '', timeout = 1500) {
     document.body.removeChild(document.getElementById(id))
   }, timeout)
 }
+
+export function getUuid () {
+  return +new Date() + Math.random().toString().substr(2, 10) + Math.random().toString().substr(2, 9)
+}
