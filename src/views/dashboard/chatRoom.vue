@@ -11,7 +11,7 @@
                             <a slot="title" href="https://www.antdv.com/">{{ item.title }}</a>
                             <a-avatar
                                 slot="avatar"
-                            src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                            src="https://img2.baidu.com/it/u=3048694672,3208316717&fm=26&fmt=auto&gp=0.jpg"
                             />
                         </a-list-item-meta>
                     </a-list-item>
@@ -26,7 +26,7 @@
                                 <a-list-item-meta v-if="item.type === 2" style="margin-bottom: 10px">
                                     <a-avatar
                                         slot="avatar"
-                                        src="https://img2.baidu.com/it/u=3048694672,3208316717&fm=26&fmt=auto&gp=0.jpg"
+                                        :src="touxiang[index%5]"
                                     />
                                     <span slot="description" class="chat-pop">{{item.msg}}</span>
                                 </a-list-item-meta>
@@ -35,7 +35,7 @@
                                     <span class="chat-pop chat-pop-by-me">{{item.msg}}</span>
                                     <a-avatar
                                         slot="avatar"
-                                        src="https://img0.baidu.com/it/u=3276060740,3132114182&fm=26&fmt=auto&gp=0.jpg"
+                                        :src="touxiang[0]"
                                     />
                                 </div>
                             </div>
@@ -121,9 +121,18 @@ const data = [
     title: 'Ant Design Title 4',
   },
 ];
+const touxiang = [
+    'https://img2.baidu.com/it/u=1678948314,1083480950&fm=26&fmt=auto&gp=0.jpg',
+    'https://img0.baidu.com/it/u=1406515706,336510358&fm=26&fmt=auto&gp=0.jpg',
+    'https://img0.baidu.com/it/u=3276060740,3132114182&fm=26&fmt=auto&gp=0.jpg',
+    'https://img0.baidu.com/it/u=3340720517,1197134702&fm=26&fmt=auto&gp=0.jpg',
+    'https://img0.baidu.com/it/u=3276060740,3132114182&fm=26&fmt=auto&gp=0.jpg',
+    'https://img2.baidu.com/it/u=3048694672,3208316717&fm=26&fmt=auto&gp=0.jpg'
+]
 export default {
     data() {
         return {
+            touxiang,
             data,
             chatting: true,
             popoverVisible: true,
@@ -132,16 +141,18 @@ export default {
         }
     },
     created() {
-        this.$socket.onmessage = (e) => {
-            this.$notification.success({
-                message: e.data
-            })
-            // type: 1--自己发的  2-- 别人发的
-            this.chatList.push({
-                type: 2,
-                msg: e.data
-            })
-        }
+        setTimeout(() => {
+            this.$socket.onmessage = (e) => {
+                this.$notification.success({
+                    message: e.data
+                })
+                // type: 1--自己发的  2-- 别人发的
+                this.chatList.push({
+                    type: 2,
+                    msg: e.data
+                })
+            }
+        }, 0)
     },
     methods: {
         onSearch(val) {

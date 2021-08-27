@@ -19,11 +19,12 @@ import './utils/filter' // global filter
 import './global.less'
 
 Vue.config.productionTip = false
-if (process.env.NODE_ENV === "development") {
-  var ws = new WebSocket('ws://localhost:8001');
-} else {
-  var ws = new WebSocket('ws://120.26.52.177:8001');
-}
+// if (process.env.NODE_ENV === "development") {
+//   var ws = new WebSocket('ws://localhost:8001');
+// } else {
+//   var ws = new WebSocket('ws://120.26.52.177:8001');
+// }
+var ws = new WebSocket('ws://120.26.52.177:8001');
 if(window.WebSocket){
   ws.onopen = function(e){
       console.log("连接服务器成功");
