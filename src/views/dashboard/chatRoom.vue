@@ -11,7 +11,7 @@
                             <a slot="title" href="https://www.antdv.com/">{{ item.title }}</a>
                             <a-avatar
                                 slot="avatar"
-                            src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                            src="https://img2.baidu.com/it/u=3048694672,3208316717&fm=26&fmt=auto&gp=0.jpg"
                             />
                         </a-list-item-meta>
                     </a-list-item>
@@ -19,32 +19,35 @@
             </div>
             <div class="records">
                 <div v-show="chatting">
-                    <div class="name">王八蛋</div>
+                    <div class="name">一起来happy</div>
                     <div class="content">
                         <div class="main">
-                            <a-list-item-meta v-for="(item, index) in Array.from({'length': 110})" :key='index'>
-                                <a-avatar
-                                    slot="avatar"
-                                    src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                                />
-                                <span slot="description" class="chat-pop">哈哈哈</span>
-                            </a-list-item-meta>
+                            <div v-for="(item, index) in chatList" :key='index'>
+                                <a-list-item-meta v-if="item.type === 2" style="margin-bottom: 10px">
+                                    <a-avatar
+                                        slot="avatar"
+                                        :src="touxiang[index%5]"
+                                    />
+                                    <span slot="description" class="chat-pop">{{item.msg}}</span>
+                                </a-list-item-meta>
 
-                            <div class="sendRecord">
-                                <span class="chat-pop chat-pop-by-me">哈哈哈</span>
-                                <a-avatar
-                                    slot="avatar"
-                                    src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                                />
+                                <div class="sendRecord" v-if="item.type === 1">
+                                    <span class="chat-pop chat-pop-by-me">{{item.msg}}</span>
+                                    <a-avatar
+                                        slot="avatar"
+                                        :src="touxiang[0]"
+                                    />
+                                </div>
                             </div>
                         </div>
                         <div class="inputVal">
                             <a-textarea
+                                @keyup.enter.native="sendMsg"
                                 v-model="inputVal"
                                 placeholder="说点什么吧..."
                                 :auto-size="{ minRows: 3, maxRows: 5 }"
                             />
-                            <a-button type="primary" size="small" style="margin-top: 5px;float: right">
+                            <a-button @click="sendMsg" type="primary" size="small" style="margin-top: 5px;float: right">
                                 发送
                             </a-button>
                         </div>
@@ -118,18 +121,52 @@ const data = [
     title: 'Ant Design Title 4',
   },
 ];
+const touxiang = [
+    'https://img2.baidu.com/it/u=1678948314,1083480950&fm=26&fmt=auto&gp=0.jpg',
+    'https://img0.baidu.com/it/u=1406515706,336510358&fm=26&fmt=auto&gp=0.jpg',
+    'https://img0.baidu.com/it/u=3276060740,3132114182&fm=26&fmt=auto&gp=0.jpg',
+    'https://img0.baidu.com/it/u=3340720517,1197134702&fm=26&fmt=auto&gp=0.jpg',
+    'https://img0.baidu.com/it/u=3276060740,3132114182&fm=26&fmt=auto&gp=0.jpg',
+    'https://img2.baidu.com/it/u=3048694672,3208316717&fm=26&fmt=auto&gp=0.jpg'
+]
 export default {
     data() {
         return {
+            touxiang,
             data,
             chatting: true,
             popoverVisible: true,
-            inputVal: ''
+            inputVal: '',
+            chatList: []
         }
+    },
+    created() {
+        setTimeout(() => {
+            this.$socket.onmessage = (e) => {
+                this.$notification.success({
+                    message: e.data
+                })
+                // type: 1--自己发的  2-- 别人发的
+                this.chatList.push({
+                    type: 2,
+                    msg: e.data
+                })
+            }
+        }, 0)
     },
     methods: {
         onSearch(val) {
             console.log(val)
+        },
+        sendMsg() {
+            if (this.inputVal) {
+                this.chatList.push({
+                    type: 1,
+                    msg: this.inputVal
+                })
+                this.$socket.send(`${this.inputVal},id:${this.$socketId}`)
+            }
+            this.inputVal = ''
         }
     }
 }
@@ -184,6 +221,7 @@ export default {
             margin-top: 20px;
             /deep/ .ant-list-item-meta {
                 align-items: center;
+                margin-bottom: 5px;
             }
             .chat-pop {
                 border: 1px solid #52c41a;
@@ -215,6 +253,7 @@ export default {
                 justify-content: flex-end;
                 display: flex;
                 align-items: center;
+                margin-bottom: 5px;
                 .chat-pop-by-me {
                     margin-right: 16px;
                     background-color: #52c41a;
